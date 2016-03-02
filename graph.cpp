@@ -7,19 +7,35 @@ void graph::init() {
 			arr[i][j] = 0;
 		}
 	}
-	V = 6;
+	V = 9;
 	E = 7;
 	finished = 0;
 
 
+	addedge(0, 1, 1,4);
+	addedge(0, 7, 1, 8);
+	addedge(1, 2, 1, 8);
+	addedge(1, 7, 1, 11);
+	addedge(2, 3, 1, 7);
+	addedge(2, 8, 1, 2);
+	addedge(2, 5, 1, 4);
+	addedge(3, 4, 1, 9);
+	addedge(3, 5, 1, 14);
+	addedge(4, 5, 1, 10);
+	addedge(5, 6, 1, 2);
+	addedge(6, 7, 1, 1);
+	addedge(6, 8, 1, 6);
+	addedge(7, 8, 1, 7);
+
 	//Input for BFS
-	addedge(0, 1, 1);
+	/*addedge(0, 1, 1);
 	addedge(0, 4, 1);
 	addedge(0, 5, 1);
 	addedge(1, 2, 1);
 	addedge(1, 4, 1);
 	addedge(2, 3, 1);
 	addedge(3, 4, 1);
+	*/
 
 	//Input for topo`sorting(update V and E)
 
@@ -48,11 +64,15 @@ void graph::init() {
 
 }
 
-void graph::addedge(int i, int j, int directed) {
+void graph::addedge(int i, int j, int directed,int w) {
 	//TODO check boundary
-	arr[i][j] = 1;
+
+	int c = 1;
+	if (w)
+		c = w;
+	arr[i][j] = c;
 	if (directed)
-		arr[j][i] = 1;
+		arr[j][i] = c;
 }
 
 void graph::print() {
@@ -69,6 +89,12 @@ void graph::print() {
 void graph::print_parent() {
 	for (int i = 0; i < V; i++) {
 		printf("parent of %d = %d \n", i, parent[i]);
+	}
+}
+
+void graph::print_distance() {
+	for (int i = 0; i < V; i++) {
+		printf("distance of %d = %d \n", i, dist[i]);
 	}
 }
 
@@ -284,11 +310,64 @@ void graph::bfs() {
 
 
 }
+
+int graph::getmin() {
+	int d = INT_MAX;
+	int v = 0;
+	for (int i = 0; i < V; i++) {
+		if ((intree[i] == 0) && (d> dist[i])) {
+			d = dist[i];
+			v = i;
+		}
+	}
+	return v;
+
+}
+
+void graph::shortestpath(int s) {
+	dist = new int[V];
+	intree = new int[V];
+	parent = new int[V];
+	memset(parent, -1, V*sizeof(int));
+
+	for (int i = 0; i < V; i++) {
+		dist[i] = INT_MAX;
+		intree[i] = 0;
+	}
+
+
+	dist[s] = 0;
+	int v = s;
+
+	while (intree[v] == 0) {
+		intree[v] = 1;
+		printf("concluded vertex is %d \n", v);
+		for (int i = 0; i < V; i++) {
+			if (arr[v][i] > 0) {
+				int old = dist[i];
+				int next = dist[v] + arr[v][i];
+				if (next < old) {
+					dist[i] = next;
+					parent[i] = v;
+				}
+			}
+		}
+
+		v = getmin();
+	}
+
+
+	print_parent();
+	print_distance();
+}
+
+
 int main() {
 	graph *g1 = new graph(5, 7, 0);
 	g1->init();
 	g1->print();
 	//g1->dfs();
-	g1->bfs();
+	//g1->bfs();
+	g1->shortestpath(0);
 	
 }

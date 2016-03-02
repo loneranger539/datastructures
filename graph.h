@@ -23,11 +23,16 @@ public:
 	int time;
 
 	list<int> list;
+
+
+	int *dist;
+	int *intree;
+
 public:
 	graph(){};
 	graph(int tv, int te,int td) :V(te), E(te),directed(td) {};
 	void init();
-	void addedge(int, int, int);
+	void addedge(int, int, int , int w = 0);
 	void dfsutil(int);
 	void dfs();
 	void print();
@@ -40,4 +45,8 @@ public:
 	void topo_sort();
 	void bfsutil(int v);
 	void bfs();
+
+	void shortestpath(int s);
+	int getmin();
+	void print_distance();
 };
