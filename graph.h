@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdio>
 #include <list>
+#include <ctime>
 using namespace std;
 #define MAX 5000
 
@@ -28,6 +29,8 @@ public:
 	int *dist;
 	int *intree;
 
+
+
 public:
 	graph(){};
 	graph(int tv, int te,int td) :V(te), E(te),directed(td) {};
@@ -49,4 +52,13 @@ public:
 	void shortestpath(int s);
 	int getmin();
 	void print_distance();
+	void bellmanford();
+
+	void primsmst(int start);
+
+	void ford();
+
+	void art();
+	void artutil(int );
+
 };
